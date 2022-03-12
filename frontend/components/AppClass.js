@@ -41,6 +41,15 @@ export default class AppClass extends React.Component {
         console.log('err message')
         this.setState({message: 'Ouch: email is required'})
       })
+      .finally(res => {
+        // this.setState({
+        //   ...this.state,
+        //   x: x,
+        //   y: y,
+        //   steps: steps,
+        //   email: ''
+        // })
+      })
   }
 
   onChange = e => {
