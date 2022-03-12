@@ -42,13 +42,13 @@ export default class AppClass extends React.Component {
         this.setState({message: 'Ouch: email is required'})
       })
       .finally(res => {
-        // this.setState({
-        //   ...this.state,
-        //   x: x,
-        //   y: y,
-        //   steps: steps,
-        //   email: ''
-        // })
+        this.setState({
+          ...this.state,
+          x: x,
+          y: y,
+          steps: steps,
+          email: ''
+        })
       })
   }
 
@@ -60,7 +60,7 @@ export default class AppClass extends React.Component {
 
   resetBtn = () => {
     console.log(this.state)
-    this.setState({ state: this.intialState })
+    this.setState(this.initialState)
     // this.setState({ 
     //   ...this.state,
     //   message: '',
@@ -70,6 +70,71 @@ export default class AppClass extends React.Component {
     //   steps: 0,
     //   email: '',
     // })
+  }
+
+  goUp = () => { 
+    console.log('y axis should decrease')
+    if(this.state.y > 1 ) {
+      return(
+        this.setState((state) => ({
+        ...state,
+        steps: this.state.steps + 1,
+        y: this.state.y - 1,
+        message: ''
+      })))
+    } else {
+      return(
+        this.setState({message: 'you cant go up'})
+      )
+    }      
+  }
+
+  goDown = () => { 
+    if(this.state.y < 3 ) {
+      return(
+        this.setState((state) => ({
+        ...state,
+        steps: this.state.steps + 1,
+        y: this.state.y + 1,
+        message: ''
+      })))
+    } else {
+      return(
+        this.setState({message: 'you cant go down'})
+      )
+    }      
+  }
+
+  goLeft = () => { 
+    if(this.state.x > 1 ) {
+      return(
+        this.setState((state) => ({
+        ...state,
+        steps: this.state.steps + 1,
+        x: this.state.x - 1,
+        message: ''
+      })))
+    } else {
+      return(
+        this.setState({message: 'you cant go left'})
+      )
+    }
+  }
+
+  goRight = () => { 
+    if(this.state.x < 3 ) {
+      return(
+        this.setState((state) => ({
+        ...state,
+        steps: this.state.steps + 1,
+        x: this.state.x + 1,
+        message: ''
+      })))
+    } else {
+      return(
+        this.setState({message: 'you cant go right'})
+      )
+    }
   }
   
   render() {
@@ -96,10 +161,10 @@ export default class AppClass extends React.Component {
           <h3 id="message">{this.state.message}</h3>
         </div>
         <div id="keypad">
-          <button id="left">LEFT</button>
-          <button id="up">UP</button>
-          <button id="right">RIGHT</button>
-          <button id="down">DOWN</button>
+        <button id="left" onClick={this.goLeft}>LEFT</button>
+          <button id="up" onClick={this.goUp}>UP</button>
+          <button id="right" onClick={this.goRight}>RIGHT</button>
+          <button id="down" onClick={this.goDown}>DOWN</button>
           <button id="reset" onClick={this.resetBtn}>reset</button>
         </div>
         <form onSubmit={this.onSubmit}>
