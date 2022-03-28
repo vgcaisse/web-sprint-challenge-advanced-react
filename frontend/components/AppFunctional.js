@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 
-import { useChange } from './hooks'
+import {
+  useForm
+} from './hooks'
 
 const URL = 'http://localhost:9000/api/result'
 
@@ -9,12 +11,12 @@ export default function AppFunctional(props) {
   const [steps, setSteps] = useState(0)
   const [axis, setAxis] = useState({ x: 2, y: 2 })
   const [message, setMessage] = useState('')
-  const [email, setEmail] = useChange('')
+  const [email, onChange] = useForm('')
 
-  const onChange = e => {
-    const { value } = e.target
-    setEmail(value)
-  }
+  // const onChange = e => {
+  //   const { value } = e.target
+  //   setEmail(value)
+  // }
 
   const onSubmit = e => {
     e.preventDefault()
@@ -28,7 +30,7 @@ export default function AppFunctional(props) {
     axios.post(URL, payloadToSend)
       .then(resp => {
         setMessage(resp.data.message)
-        setEmail('')
+        useForm('')
       })
       .catch(err => {
         setMessage(err.response.data.message)
@@ -86,13 +88,8 @@ export default function AppFunctional(props) {
     setEmail('')
   }
 
-  // const initialState = {
-  //   axis: {x: 2, y:2}, 
-  //   steps: 0, 
-  //   message: '', 
-  //   email: ''
-  // }
-  // console.log(initialState)
+
+  // console.log(email)
 
   return (
     <div id="wrapper" className={props.className}>
@@ -122,7 +119,7 @@ export default function AppFunctional(props) {
         <button onClick={resetBtn} id="reset">reset</button>
       </div>
       <form onSubmit={onSubmit}>
-        <input onChange={email} setEmail={setEmail} value={email} id="email" type="email" placeholder="type email"></input>
+        <input onChange={onChange} value={email} id="email" type="email" placeholder="type email"></input>
         <input id="submit" type="submit"></input>
       </form>
     </div>

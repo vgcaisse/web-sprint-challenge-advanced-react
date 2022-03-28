@@ -10,10 +10,12 @@ const initialState = {
 
 const URL = 'http://localhost:9000/api/result'
 
-export const useChange = (e) => {
-    const [email, setEmail] = useState(() => {
-        const { value, id } = e.target
+export function useForm(initialState) {
+    // console.log(onChange)
+    const [email, setEmail] = useState(initialState)
+    const onChange = e => {
+        const { value } = e.target
         setEmail(value)
-    })
-    return [email, setEmail]
+    }
+    return [email, onChange]
 }
