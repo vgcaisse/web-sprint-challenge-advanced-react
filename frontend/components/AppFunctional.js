@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 
-import {
-  useForm
-} from './hooks'
+// import {
+//   useForm
+// } from './hookshooks' --------------------- hooks attempt 
 
 const URL = 'http://localhost:9000/api/result'
 
@@ -11,12 +11,12 @@ export default function AppFunctional(props) {
   const [steps, setSteps] = useState(0)
   const [axis, setAxis] = useState({ x: 2, y: 2 })
   const [message, setMessage] = useState('')
-  const [email, onChange] = useForm('')
+  const [email, setEmail] = useState('')
 
-  // const onChange = e => {
-  //   const { value } = e.target
-  //   setEmail(value)
-  // }
+  const onChange = e => {
+    const { value } = e.target
+    setEmail(value)
+  }
 
   const onSubmit = e => {
     e.preventDefault()
@@ -30,7 +30,7 @@ export default function AppFunctional(props) {
     axios.post(URL, payloadToSend)
       .then(resp => {
         setMessage(resp.data.message)
-        useForm('')
+        setEmail('')
       })
       .catch(err => {
         setMessage(err.response.data.message)
@@ -88,14 +88,22 @@ export default function AppFunctional(props) {
     setEmail('')
   }
 
+  // const initialState = {
+  //   axis: {x: 2, y:2}, 
+  //   steps: 0, 
+  //   message: '', 
+  //   email: ''
+  // }
 
-  // console.log(email)
-
+  console.log(axis)
+  console.log(email)
+  console.log(steps)
+  
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">Coordinates ({axis.x}, {axis.y})</h3>
-        <h3 id="steps" >You moved {steps} times</h3>
+        <h3 id="steps" >You moved {steps} {steps > 1 ? 'times' : 'time'}</h3>
       </div>
       <div id="grid">
         <div className={`${axis.x == 1 && axis.y == 1 ? "square active" : "square"}`}>{axis.x === 1 && axis.y === 1 ? "B" : ""}</div>
