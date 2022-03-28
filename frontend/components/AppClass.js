@@ -1,174 +1,149 @@
 import React from 'react'
-import axios from 'axios';
+import axios from 'axios'
 
-const intialState = {
-  message: '',
-  // axis: { x: 0, y: 0 },
-  x: 2,
-  y: 2,
+const initialState = {
+  axis: { x: 2, y: 2 },
   steps: 0,
-  email: '',
+  message: '',
+  email: ''
 }
 
-const URL = `http://localhost:9000/api/result`;
+const URL = 'http://localhost:9000/api/result'
 
 export default class AppClass extends React.Component {
-  
-  state = intialState
 
-  onSubmit = (e) => {
-    e.preventDefault();
-    const { x, y, steps, email } = this.state
+  state = initialState
+
+  onSubmit = event => {
+    event.preventDefault()
     const payloadToSend = {
-      x: x,
-      y: y,
-      steps: steps,
-      email: email
+      x: this.state.axis.x,
+      y: this.state.axis.y,
+      steps: this.state.steps,
+      email: this.state.email
     }
     axios.post(URL, payloadToSend)
-      .then(res => {
-        console.log('STATE IS ABOUT TO CHANGE')
-        this.setState({
-          ...this.state, 
-          email: res.data.email,
-          x: res.data.x,
-          y: res.data.y,
-          steps: res.data.steps,
-          message: res.data.message,
-        })
+      .then(resp => {
+        this.setState({ ...this.state, message: resp.data.message })
+        this.setState({ ...this.state, email: '' })
       })
       .catch(err => {
-        console.log('err message')
-        this.setState({message: 'Ouch: email is required'})
-      })
-      .finally(res => {
-        this.setState({
-          ...this.state,
-          x: x,
-          y: y,
-          steps: steps,
-          email: ''
-        })
+        this.setState({ ...this.state, message: err.response.data.message })
       })
   }
 
-  onChange = e => {
-    console.log(this.state)
-    const { value, id } = e.target
-    this.setState({ ...this.state, [id]: value })
+  onChange = event => {
+    const { value } = event.target
+    this.setState({ ...this.state, email: value })
+
+  }
+
+  goUp = () => {
+    if (this.state.axis.y > 1) {
+      this.setState({
+        ...this.state,
+        steps: this.state.steps + 1,
+        axis: { ...this.state.axis, y: this.state.axis.y - 1 },
+        message: ''
+      });
+
+    }
+    else {
+      this.setState({ ...this.state, message: "You can't go up" })
+    }
+  }
+
+  goDown = () => {
+    if (this.state.axis.y < 3) {
+      this.setState({
+        ...this.state,
+        steps: this.state.steps + 1,
+        axis: { ...this.state.axis, y: this.state.axis.y + 1 },
+        message: ''
+      });
+    }
+    else {
+      this.setState({ ...this.state, message: "You can't go down" })
+    }
+  }
+
+  goLeft = () => {
+    if (this.state.axis.x > 1) {
+      this.setState({
+        ...this.state,
+        steps: this.state.steps + 1,
+        axis: { ...this.state.axis, x: this.state.axis.x - 1 },
+        message: ''
+      });
+    }
+    else {
+      this.setState({ ...this.state, message: "You can't go left" })
+    }
+  }
+
+  goRight = () => {
+    if (this.state.axis.x < 3) {
+      this.setState({
+        ...this.state,
+        steps: this.state.steps + 1,
+        axis: { ...this.state.axis, x: this.state.axis.x + 1 },
+        message: ''
+      });
+    }
+    else {
+      this.setState({ ...this.state, message: "You can't go right" })
+    }
   }
 
   resetBtn = () => {
-    console.log(this.state)
-    this.setState(this.initialState)
-    // this.setState({ 
-    //   ...this.state,
-    //   message: '',
-    //   // axis: {x: 0, y: 0},
-    //   x: 2,
-    //   y: 2,
-    //   steps: 0,
-    //   email: '',
-    // })
+    this.setState({
+      axis: { x: 2, y: 2 },
+      steps: 0,
+      message: '',
+      email: ''
+    })
   }
 
-  goUp = () => { 
-    console.log('y axis should decrease')
-    if(this.state.y > 1 ) {
-      return(
-        this.setState((state) => ({
-        ...state,
-        steps: this.state.steps + 1,
-        y: this.state.y - 1,
-        message: ''
-      })))
-    } else {
-      return(
-        this.setState({message: 'you cant go up'})
-      )
-    }      
-  }
-
-  goDown = () => { 
-    if(this.state.y < 3 ) {
-      return(
-        this.setState((state) => ({
-        ...state,
-        steps: this.state.steps + 1,
-        y: this.state.y + 1,
-        message: ''
-      })))
-    } else {
-      return(
-        this.setState({message: 'you cant go down'})
-      )
-    }      
-  }
-
-  goLeft = () => { 
-    if(this.state.x > 1 ) {
-      return(
-        this.setState((state) => ({
-        ...state,
-        steps: this.state.steps + 1,
-        x: this.state.x - 1,
-        message: ''
-      })))
-    } else {
-      return(
-        this.setState({message: 'you cant go left'})
-      )
-    }
-  }
-
-  goRight = () => { 
-    if(this.state.x < 3 ) {
-      return(
-        this.setState((state) => ({
-        ...state,
-        steps: this.state.steps + 1,
-        x: this.state.x + 1,
-        message: ''
-      })))
-    } else {
-      return(
-        this.setState({message: 'you cant go right'})
-      )
-    }
-  }
-  
   render() {
     console.log(this.state)
     const { className } = this.props
+
+    const {
+      email,
+      steps,
+      axis,
+      message
+    } = this.state
+
     return (
       <div id="wrapper" className={className}>
         <div className="info">
-          <h3 id="coordinates">Coordinates ({this.state.x}, {this.state.y})</h3>
-          <h3 id="steps">You moved {this.state.steps} times</h3>
+          <h3 id="coordinates">{`Coordinates (${axis.x}, ${axis.y})`}</h3>
+          <h3 id="steps">You moved {steps} times </h3>
         </div>
         <div id="grid">
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square active">B</div>
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square"></div>
-          <div className="square"></div>
+          <div className={`${axis.x == 1 && axis.y == 1 ? "square active" : "square"}`}>{axis.x === 1 && axis.y === 1 ? "B" : ""}</div>
+          <div className={`${axis.x == 2 && axis.y == 1 ? "square active" : "square"}`}>{axis.x === 2 && axis.y === 1 ? "B" : ""}</div>
+          <div className={`${axis.x == 3 && axis.y == 1 ? "square active" : "square"}`}>{axis.x === 3 && axis.y === 1 ? "B" : ""}</div>
+          <div className={`${axis.x == 1 && axis.y == 2 ? "square active" : "square"}`}>{axis.x === 1 && axis.y === 2 ? "B" : ""}</div>
+          <div className={`${axis.x == 2 && axis.y == 2 ? "square active" : "square"}`}>{axis.x === 2 && axis.y === 2 ? "B" : ""}</div>
+          <div className={`${axis.x == 3 && axis.y == 2 ? "square active" : "square"}`}>{axis.x === 3 && axis.y === 2 ? "B" : ""}</div>
+          <div className={`${axis.x == 1 && axis.y == 3 ? "square active" : "square"}`}>{axis.x === 1 && axis.y === 3 ? "B" : ""}</div>
+          <div className={`${axis.x == 2 && axis.y == 3 ? "square active" : "square"}`}>{axis.x === 2 && axis.y === 3 ? "B" : ""}</div>
+          <div className={`${axis.x == 3 && axis.y == 3 ? "square active" : "square"}`}>{axis.x === 3 && axis.y === 3 ? "B" : ""}</div>
         </div>
         <div className="info">
-          <h3 id="message">{this.state.message}</h3>
+          <h3 id="message">{message}</h3>
         </div>
         <div id="keypad">
-        <button id="left" onClick={this.goLeft}>LEFT</button>
-          <button id="up" onClick={this.goUp}>UP</button>
-          <button id="right" onClick={this.goRight}>RIGHT</button>
-          <button id="down" onClick={this.goDown}>DOWN</button>
-          <button id="reset" onClick={this.resetBtn}>reset</button>
+          <button onClick={this.goLeft} id="left">LEFT</button>
+          <button onClick={this.goUp} id="up">UP</button>
+          <button onClick={this.goRight} id="right">RIGHT</button>
+          <button onClick={this.goDown} id="down">DOWN</button>
+          <button onClick={this.resetBtn} id="reset">reset</button>
         </div>
         <form onSubmit={this.onSubmit}>
-          <input id="email" type="email" placeholder="type email" onChange={this.onChange}></input>
+          <input onChange={this.onChange} value={email} id="email" type="email" placeholder="type email"></input>
           <input id="submit" type="submit"></input>
         </form>
       </div>
