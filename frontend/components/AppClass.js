@@ -105,7 +105,7 @@ export default class AppClass extends React.Component {
   }
 
   render() {
-    console.log(this.state)
+    // console.log(this.state)
     const { className } = this.props
 
     const {
@@ -119,7 +119,7 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">{`Coordinates (${axis.x}, ${axis.y})`}</h3>
-          <h3 id="steps">You moved {steps} {steps > 1 ? 'times' : 'time'} </h3>
+          <h3 id="steps">You moved {steps} {steps === 1 ? 'time' : 'times'}</h3>
         </div>
         <div id="grid">
           <div className={`${axis.x == 1 && axis.y == 1 ? "square active" : "square"}`}>{axis.x === 1 && axis.y === 1 ? "B" : ""}</div>

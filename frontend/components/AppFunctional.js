@@ -88,22 +88,15 @@ export default function AppFunctional(props) {
     setEmail('')
   }
 
-  // const initialState = {
-  //   axis: {x: 2, y:2}, 
-  //   steps: 0, 
-  //   message: '', 
-  //   email: ''
-  // }
-
-  console.log(axis)
-  console.log(email)
-  console.log(steps)
+  // console.log(axis)
+  // console.log(email)
+  // console.log(steps)
   
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">Coordinates ({axis.x}, {axis.y})</h3>
-        <h3 id="steps" >You moved {steps} {steps > 1 ? 'times' : 'time'}</h3>
+        <h3 id="steps" >You moved {steps} {steps === 1 ? 'time' : 'times'}</h3>
       </div>
       <div id="grid">
         <div className={`${axis.x == 1 && axis.y == 1 ? "square active" : "square"}`}>{axis.x === 1 && axis.y === 1 ? "B" : ""}</div>
